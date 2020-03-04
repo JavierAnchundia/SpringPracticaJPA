@@ -29,6 +29,19 @@ public class MaintJpaApplication implements CommandLineRunner {
         persona.setId(new Long(1));
         persona.setNombre("Javier");
         persona.setApellido("Anchundia");
+
+        Persona persona2 = new  Persona();
+        persona2.setId(new Long(2));
+        persona2.setNombre("Javier");
+        persona2.setApellido("Rosado");
+
+        Persona persona3 = new  Persona();
+        persona3.setId(new Long(3));
+        persona3.setNombre("Jesus");
+        persona3.setApellido("Rosado");
+
         personaRepositorio.save(persona);
+        personaRepositorio.save(persona2);
+        personaRepositorio.save(persona3);
     }
 }

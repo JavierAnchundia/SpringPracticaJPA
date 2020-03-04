@@ -16,4 +16,7 @@ public class Persona {
     private String nombre;
     private String apellido;
 
+    public boolean isPersisted() {
+        return id != null;
+    }
 }
