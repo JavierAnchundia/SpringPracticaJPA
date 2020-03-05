@@ -1,14 +1,12 @@
-package com.maint.maintjpa;
+package com.maint.maintjpa.datos;
 
-import com.maint.maintjpa.datos.Persona;
+import com.maint.maintjpa.entidades.Persona;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 //Recuerda que esto es el Patron Repositorio implementado por el framework por debajo
-@Component
 public interface PersonaRepositorio extends JpaRepository<Persona, Long> {
 
 

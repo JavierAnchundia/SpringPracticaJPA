@@ -1,13 +1,12 @@
 package com.maint.maintjpa;
 
-import com.maint.maintjpa.datos.Persona;
-import com.vaadin.annotations.Theme;
-import com.vaadin.annotations.VaadinServletConfiguration;
+import com.maint.maintjpa.datos.MateriaRepositorio;
+import com.maint.maintjpa.datos.PersonaRepositorio;
+import com.maint.maintjpa.entidades.Persona;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewDisplay;
 import com.vaadin.server.VaadinRequest;
-import com.vaadin.server.VaadinServlet;
 import com.vaadin.shared.ui.ValueChangeMode;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.annotation.SpringViewDisplay;
@@ -15,7 +14,6 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.servlet.annotation.WebServlet;
 import java.util.List;
 
 /**
@@ -31,10 +29,13 @@ public class MyUI extends UI implements ViewDisplay {
 
     @Autowired(required = true)
     private PersonaRepositorio personaRepositorio;
+
+    @Autowired(required = true)
+    private MateriaRepositorio materiaRepositorio;
     private TextField filterText = new TextField();
    // private CustomerService service = CustomerService.getInstance();
     private Grid<Persona> grid = new Grid<>(Persona.class);
-    private CustomerForm form = new CustomerForm(this,personaRepositorio);
+    private CustomerForm form;
    // private CustomerService serviiceñ;
     //private Persona p;
 
@@ -42,8 +43,11 @@ public class MyUI extends UI implements ViewDisplay {
     @Override
     protected void init(VaadinRequest vaadinRequest) {
 
+        form = new CustomerForm(this,personaRepositorio);
         final VerticalLayout layout = new VerticalLayout();
 
+        form.setVisible(false);
+        System.out.println(materiaRepositorio);
         filterText.setPlaceholder("filter by name...");
         filterText.addValueChangeListener(e -> updateList());
         filterText.setValueChangeMode(ValueChangeMode.LAZY);
@@ -56,6 +60,15 @@ public class MyUI extends UI implements ViewDisplay {
         filtering.addComponents(filterText, clearFilterTextBtn);
         filtering.setStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
 
+        Button addCustomerBtn = new Button("Add new customer");
+        addCustomerBtn.addClickListener(e -> {
+            grid.asSingleSelect().clear();
+            form.setCustomer(new Persona());
+        });
+
+        HorizontalLayout toolbar = new HorizontalLayout(filtering, addCustomerBtn);
+
+
         grid.setColumns("nombre", "apellido");
 
         HorizontalLayout main = new HorizontalLayout(grid, form);
@@ -63,9 +76,22 @@ public class MyUI extends UI implements ViewDisplay {
         grid.setSizeFull();
         main.setExpandRatio(grid, 1);
 
-        layout.addComponents(filtering, main);        updateList();
+        layout.addComponents(toolbar, main);
+        updateList();
 
         setContent(layout);
+
+        grid.asSingleSelect().addValueChangeListener(event -> {
+            if (event.getValue() == null) {
+                form.setVisible(false);
+            } else {
+                System.out.println(event.getValue().getNombre());
+                System.out.println(event.getValue().getApellido());
+
+                form.setCustomer(event.getValue());
+            }
+        });
+
     }
 
     public void updateList() {
@@ -74,6 +100,7 @@ public class MyUI extends UI implements ViewDisplay {
         if(filterText.getValue().equals(""))
             {
               customers = personaRepositorio.findAll();
+              System.out.println(customers);
             }
         else {
              customers = personaRepositorio.findByNombreStartingWith(filterText.getValue());
