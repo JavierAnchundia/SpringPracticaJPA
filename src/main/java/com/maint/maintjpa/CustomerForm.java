@@ -3,10 +3,7 @@ import com.maint.maintjpa.datos.PersonaRepositorio;
 import com.maint.maintjpa.entidades.Persona;
 import com.vaadin.data.Binder;
 import com.vaadin.event.ShortcutAction;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.TextField;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
 public class CustomerForm extends FormLayout {
@@ -15,6 +12,8 @@ public class CustomerForm extends FormLayout {
     private TextField apellido = new TextField("Apellido");
     private Button save = new Button("Save");
     private Button delete = new Button("Delete");
+
+
 
 
     private PersonaRepositorio personaRepositorio;

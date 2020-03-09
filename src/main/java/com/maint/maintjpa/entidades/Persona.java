@@ -15,6 +15,5 @@ public class Persona extends EntidadBase {
     private String nombre;
     private String apellido;
     private String cedula;
-    @OneToMany(cascade= CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Materia> materias;
+
 }

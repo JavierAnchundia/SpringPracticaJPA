@@ -11,11 +11,11 @@ import javax.persistence.*;
 public class Materia extends EntidadBase {
 
     private String nombre;
-    private int aula;
-    private int numeroEstudiantes;
-    private int anio;
-   @ManyToOne(optional=false, cascade= CascadeType.ALL, fetch = FetchType.EAGER)
-    private Persona persona;
+    private String aula;
+    private String numeroEstudiantes;
+    private String anio;
+
+
 
 
 
