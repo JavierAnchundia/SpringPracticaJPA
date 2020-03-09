@@ -18,6 +18,7 @@ public class MateriasForm extends FormLayout {
     private TextField aula = new TextField("aula");
     private TextField numeroEstudiantes = new TextField("#Estudiantes");
     private TextField anio = new TextField("anio");
+    //private TextField persona = new TextField(("alumno"));
 
     private MyUI myUI;
     private Materia materia;
@@ -30,6 +31,11 @@ public class MateriasForm extends FormLayout {
     public MateriasForm(MyUI myUI, MateriaRepositorio materiaRepositorio) {
         this.materiaRepositorio = materiaRepositorio;
         this.myUI = myUI;
+
+
+       /* binderM.forField(persona)
+                .withConverter(new ConvertidorPersona())
+                .bind(Materia::getPersona,Materia::setPersona);*/
         binderM.bindInstanceFields(this);
 
         setSizeUndefined();
@@ -44,6 +50,11 @@ public class MateriasForm extends FormLayout {
 
     public void setMateria(Materia materia) {
         this.materia = materia;
+
+
+        /*binderM.forField(persona)
+                .withConverter(new ConvertidorPersona())
+                .bind(Materia::getPersona,Materia::setPersona);*/
         binderM.setBean(this.materia);
 
         // Show delete button for only customers already in the database

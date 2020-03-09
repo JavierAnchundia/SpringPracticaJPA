@@ -1,5 +1,6 @@
 package com.maint.maintjpa;
 import com.maint.maintjpa.datos.PersonaRepositorio;
+import com.maint.maintjpa.entidades.Materia;
 import com.maint.maintjpa.entidades.Persona;
 import com.vaadin.data.Binder;
 import com.vaadin.event.ShortcutAction;
@@ -12,6 +13,8 @@ public class CustomerForm extends FormLayout {
     private TextField apellido = new TextField("Apellido");
     private Button save = new Button("Save");
     private Button delete = new Button("Delete");
+    private TextArea materias = new TextArea("Materias");
+    private NativeSelect<Materia> status = new NativeSelect<>("Materias");
 
 
 
@@ -24,11 +27,16 @@ public class CustomerForm extends FormLayout {
     public CustomerForm(MyUI myUI, PersonaRepositorio personaRepositorio) {
         this.personaRepositorio = personaRepositorio;
         this.myUI = myUI;
+
+
+        binder.forField(materias)
+                .withConverter(new ConvertidorMateria())
+                .bind(Persona::getMaterias,Persona::setMaterias);
         binder.bindInstanceFields(this);
 
         setSizeUndefined();
         HorizontalLayout buttons = new HorizontalLayout(save, delete);
-        addComponents(nombre, apellido, buttons);
+        addComponents(nombre, apellido, status, buttons);
         save.setStyleName(ValoTheme.BUTTON_PRIMARY);
         save.setClickShortcut(ShortcutAction.KeyCode.ENTER);
 
@@ -38,6 +46,12 @@ public class CustomerForm extends FormLayout {
 
     public void setCustomer(Persona persona) {
         this.persona = persona;
+
+
+        binder.forField(materias)
+                .withConverter(new ConvertidorMateria())
+                .bind(Persona::getMaterias,Persona::setMaterias);
+
         binder.setBean(this.persona);
 
         // Show delete button for only customers already in the database

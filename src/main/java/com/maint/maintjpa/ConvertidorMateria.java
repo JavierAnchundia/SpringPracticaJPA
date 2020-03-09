@@ -9,16 +9,19 @@ import com.vaadin.data.ValueContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionException;
 
-public class ConvertidorMateria implements Converter<String, Materia>  {
+import java.util.Arrays;
+import java.util.List;
+
+public class ConvertidorMateria implements Converter<String, List<Materia>>  {
 
     @Autowired
     MateriaRepositorio materiaRepositorio;
 
     @Override
-    public Result<Materia> convertToModel (String nombre, ValueContext context)  {
+    public Result<List<Materia>> convertToModel (String nombre, ValueContext context)  {
         try {
             // ok is a static helper method that creates a Result
-            return Result.ok(materiaRepositorio.findByNombre(nombre).get(0));
+            return Result.ok(Arrays.asList(new Materia()));
         } catch (NumberFormatException e) {
             // error is a static helper method that creates a Result
             return Result.error("Please enter a number");
@@ -26,8 +29,15 @@ public class ConvertidorMateria implements Converter<String, Materia>  {
     }
 
     @Override
-    public String convertToPresentation(Materia materia, ValueContext context) {
-        return materia.getNombre();
+    public String convertToPresentation(List<Materia> materias, ValueContext context)
+    {
+        String smaterias="";
+        if(materias==null) return smaterias;
+        for(int i=0;i<materias.size();i++){
+            smaterias+=materias.get(i).getNombre();
+            smaterias+="\n";
+        }
+        return smaterias;
     }
 
     public Class<Materia> getModelType() {
