@@ -21,7 +21,7 @@ public class ConvertidorMateria implements Converter<String, List<Materia>>  {
     public Result<List<Materia>> convertToModel (String nombre, ValueContext context)  {
         try {
             // ok is a static helper method that creates a Result
-            return Result.ok(Arrays.asList(new Materia()));
+            return Result.ok(Arrays.asList());
         } catch (NumberFormatException e) {
             // error is a static helper method that creates a Result
             return Result.error("Please enter a number");

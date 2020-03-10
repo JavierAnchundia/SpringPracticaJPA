@@ -15,17 +15,21 @@ public class Materia extends EntidadBase {
     private String numeroEstudiantes;
     private String anio;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Persona persona;
 
     public Materia()
     {
-        this.setPersona(new Persona());
+        /*this.setPersona(new Persona());
+        persona.setNombre("");*/
+
     }
 
     public Materia(Persona p)
     {
         this.setPersona(p);
+        persona.setNombre("");
+
     }
 
     public Persona getPersona() {
@@ -35,4 +39,11 @@ public class Materia extends EntidadBase {
     public void setPersona(Persona persona) {
         this.persona = persona;
     }
+
+    @Override
+    public String toString(){
+        return this.getNombre();
+    }
 }
+
+

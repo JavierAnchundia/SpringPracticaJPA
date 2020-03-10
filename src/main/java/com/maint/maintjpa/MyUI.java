@@ -16,6 +16,8 @@ import com.vaadin.ui.themes.ValoTheme;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.ListIterator;
+import java.util.Optional;
 
 /**
  * This UI is the application entry point. A UI may either represent a browser window 
@@ -38,6 +40,7 @@ public class MyUI extends UI implements ViewDisplay {
     private MateriasForm materiasForm;
 
     private TextField filterText = new TextField();
+    private TextArea materiasPersona = new TextArea();
    // private CustomerService service = CustomerService.getInstance();
     private CustomerForm form;
     private HorizontalLayout UIMaterias;
@@ -64,7 +67,7 @@ public class MyUI extends UI implements ViewDisplay {
 
         visualizarCustomer.setVisible(false);
 
-        form = new CustomerForm(this,personaRepositorio);
+        form = new CustomerForm(this,personaRepositorio,materiaRepositorio);
         final VerticalLayout layout = new VerticalLayout();
         creacionMaterias();
         form.setVisible(false);
@@ -123,6 +126,8 @@ public class MyUI extends UI implements ViewDisplay {
                 visualizarCustomer,viewMaterias,agregarMaterias);
         grid.setColumns("nombre", "apellido");
         materiaGrid.getGrid().setColumns("nombre","aula","numeroEstudiantes","anio");
+       // materiaGrid.getGrid().addColumn((Materia::getNombrePersona)).setCaption("Name");
+
 
         HorizontalLayout main = new HorizontalLayout(grid, UIMaterias,form);
         main.setSizeFull();
@@ -136,7 +141,7 @@ public class MyUI extends UI implements ViewDisplay {
         main.setExpandRatio(grid, 1);
 
 
-        layout.addComponents(toolbar, main);
+        layout.addComponents(toolbar, main , materiasPersona);
         updateList();
         updateListMaterias();
 
@@ -146,10 +151,9 @@ public class MyUI extends UI implements ViewDisplay {
             if (event.getValue() == null) {
                 form.setVisible(false);
             } else {
-                System.out.println(event.getValue().getNombre());
-                System.out.println(event.getValue().getApellido());
 
                 form.setCustomer(event.getValue());
+                materiasPersona.setValue(updateTextArea(event.getValue()));
             }
         });
 
@@ -163,7 +167,15 @@ public class MyUI extends UI implements ViewDisplay {
             }        });
 
     }
+    public String updateTextArea(Persona persona){
+      List<Materia> materias = materiaRepositorio.findByPersona(persona);
+      String texto="";
+      for(Materia materia:materias){
+          texto+= materia.getNombre()+ "\n";
+      }
 
+      return texto;
+    }
     public void updateList() {
         System.out.println(filterText.getValue());
         List<Persona> customers;
@@ -176,6 +188,7 @@ public class MyUI extends UI implements ViewDisplay {
              customers = personaRepositorio.findByNombreStartingWith(filterText.getValue());
              }
         grid.setItems(customers);
+
     }
 
     public void updateListMaterias() {
